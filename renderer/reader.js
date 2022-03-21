@@ -27,3 +27,5 @@ readitClose.onclick = (e) => {
 
 // appent to the new window
 document.getElementsByTagName("body")[0].append(readitClose);
+
+// some changes
