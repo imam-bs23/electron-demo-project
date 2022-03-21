@@ -19,8 +19,6 @@ window.deleteItem = () => {
   items.delete(selectedItem.index);
 };
 
-// some chaneg
-
 window.searchItems = () => {
   search.focus();
 };
