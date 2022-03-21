@@ -8,8 +8,34 @@ exports.storage = JSON.parse(localStorage.getItem("readit-items")) || [];
 
 // listen to reader js message
 window.addEventListener("message", (e) => {
-  console.log(e.data);
+  if (e.data.action === "delete-reader-item") {
+    this.delete(e.data.itemIndex);
+
+    e.source.close();
+  }
 });
+
+// delete the selected item after clicking "Done"
+exports.delete = (itemIndex) => {
+  // removing form dom
+  items.removeChild(items.childNodes[itemIndex]);
+
+  // remove from storage
+  this.storage.splice(itemIndex, 1);
+
+  // persist the storage
+  this.save();
+
+  // select another item after deleting
+  if (this.storage.length) {
+    let newSelectedItemIndex = itemIndex === 0 ? 0 : itemIndex - 1;
+
+    // select the new item
+    document
+      .getElementsByClassName("read-item")
+      [newSelectedItemIndex].classList.add("selected");
+  }
+};
 
 // get reader js
 let readerJS;
@@ -21,34 +47,44 @@ exports.save = () => {
   localStorage.setItem("readit-items", JSON.stringify(this.storage));
 };
 
+exports.getSelectedItem = () => {
+  let currentItem = document.getElementsByClassName("read-item selected")[0];
+  let itemIndex = 0;
+  let child = currentItem;
+
+  while ((child = child.previousSibling) != null) {
+    itemIndex++;
+  }
+
+  return { node: currentItem, index: itemIndex };
+};
+
 exports.select = (e) => {
   // remove already selected item
-  document
-    .getElementsByClassName("read-item selected")[0]
-    .classList.remove("selected");
+  this.getSelectedItem().node.classList.remove("selected");
 
   e.currentTarget.classList.add("selected");
 };
 
 exports.changeSelection = (direction) => {
   // get currently selected item
-  let currentItem = document.getElementsByClassName("read-item selected")[0];
+  let currentItem = this.getSelectedItem();
 
   if (direction === "ArrowUp" && currentItem.previousSibling) {
-    currentItem.classList.remove("selected");
-    currentItem.previousSibling.classList.add("selected");
+    currentItem.node.classList.remove("selected");
+    currentItem.node.previousSibling.classList.add("selected");
   } else if (direction === "ArrowDown" && currentItem.nextSibling) {
-    currentItem.classList.remove("selected");
-    currentItem.nextSibling.classList.add("selected");
+    currentItem.node.classList.remove("selected");
+    currentItem.node.nextSibling.classList.add("selected");
   }
 };
 
 exports.open = () => {
   if (!this.storage.length) return;
 
-  let selectedItem = document.getElementsByClassName("read-item selected")[0];
+  let selectedItem = this.getSelectedItem();
 
-  let contentUrl = selectedItem.dataset.url;
+  let contentUrl = selectedItem.node.dataset.url;
 
   const readWin = window.open(
     contentUrl,
@@ -64,7 +100,7 @@ exports.open = () => {
   `
   );
 
-  readWin.eval(readerJS);
+  readWin.eval(readerJS.replace("index", selectedItem.index));
 };
 
 // add new item

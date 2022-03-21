@@ -15,8 +15,14 @@ readitClose.style.boxShadow = "2px 2px 2px rgba(0,0,0,0.2)";
 readitClose.style.cursor = "default";
 
 // click hander
-readitClose.onclick = () => {
-  window.opener.postMessage("hello form reader js");
+readitClose.onclick = (e) => {
+  window.opener.postMessage(
+    {
+      action: "delete-reader-item",
+      itemIndex: "index",
+    },
+    "*"
+  );
 };
 
 // appent to the new window
