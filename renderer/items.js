@@ -1,7 +1,21 @@
+// module
+const fs = require("fs");
+
 // DOM elements
 const items = document.getElementById("items");
 
 exports.storage = JSON.parse(localStorage.getItem("readit-items")) || [];
+
+// listen to reader js message
+window.addEventListener("message", (e) => {
+  console.log(e.data);
+});
+
+// get reader js
+let readerJS;
+fs.readFile(`${__dirname}/reader.js`, (err, data) => {
+  readerJS = data.toString();
+});
 
 exports.save = () => {
   localStorage.setItem("readit-items", JSON.stringify(this.storage));
@@ -35,7 +49,22 @@ exports.open = () => {
   let selectedItem = document.getElementsByClassName("read-item selected")[0];
 
   let contentUrl = selectedItem.dataset.url;
-  console.log("opening selected URL:", contentUrl);
+
+  const readWin = window.open(
+    contentUrl,
+    "",
+    `
+  maxWidth=2000,
+  maxHeight=2000,
+  width=1200,
+  height=800,
+  backgroundColor=#DEDEDE,
+  contextIsolation=1,
+  nodeIntegration=0,
+  `
+  );
+
+  readWin.eval(readerJS);
 };
 
 // add new item
