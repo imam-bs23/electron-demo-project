@@ -1,4 +1,5 @@
 // module
+const { shell } = require("electron");
 const fs = require("fs");
 
 // DOM elements
@@ -70,13 +71,21 @@ exports.changeSelection = (direction) => {
   // get currently selected item
   let currentItem = this.getSelectedItem();
 
-  if (direction === "ArrowUp" && currentItem.previousSibling) {
+  if (direction === "ArrowUp" && currentItem.node.previousSibling) {
     currentItem.node.classList.remove("selected");
     currentItem.node.previousSibling.classList.add("selected");
-  } else if (direction === "ArrowDown" && currentItem.nextSibling) {
+  } else if (direction === "ArrowDown" && currentItem.node.nextSibling) {
     currentItem.node.classList.remove("selected");
     currentItem.node.nextSibling.classList.add("selected");
   }
+};
+
+exports.openNative = () => {
+  if (!this.storage.length) return;
+
+  let selectedItem = this.getSelectedItem();
+
+  shell.openExternal(selectedItem.node.dataset.url);
 };
 
 exports.open = () => {

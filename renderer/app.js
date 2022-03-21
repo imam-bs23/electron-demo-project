@@ -8,6 +8,23 @@ let showModal = document.getElementById("show-modal"),
   itemURL = document.getElementById("url");
 search = document.getElementById("search");
 
+window.newItem = () => {
+  showModal.click();
+};
+
+window.openItem = items.open;
+
+window.deleteItem = () => {
+  let selectedItem = items.getSelectedItem();
+  items.delete(selectedItem.index);
+};
+
+window.searchItems = () => {
+  search.focus();
+};
+
+window.openNative = items.openNative;
+
 search.addEventListener("keyup", () => {
   Array.from(document.getElementsByClassName("read-item")).forEach((item) => {
     let hasMatched = item.innerText.toLowerCase().includes(search.value);
