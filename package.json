@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
-    "reset": "git reset --hard"
+    "reset": "git reset --hard",
+    "build": ""
   },
   "repository": "https://github.com/stackacademytv/master-electron",
   "keywords": [
@@ -18,6 +19,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^9.0.0",
+    "electron-builder": "^22.14.13",
     "nodemon": "^2.0.0"
   },
   "dependencies": {
