@@ -1,12 +1,13 @@
 {
-  "name": "electron",
+  "name": "Readit",
   "version": "1.0.0",
-  "description": "Master Electron Course Code",
+  "description": "Master Electron Project",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "watch": "nodemon --exec electron .",
-    "reset": "git reset --hard"
+    "reset": "git reset --hard",
+    "build": "electron-builder -l deb"
   },
   "repository": "https://github.com/stackacademytv/master-electron",
   "keywords": [
@@ -14,13 +15,28 @@
     "Master Electron",
     "demo"
   ],
-  "author": "GitHub, Stackacademytv",
+  "author": "imam <imam.hasan@brainstation-23.com>",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^9.0.0",
+    "electron-builder": "^22.14.13",
     "nodemon": "^2.0.0"
   },
   "dependencies": {
     "electron-window-state": "^5.0.3"
+  },
+  "build": {
+    "appId": "com.hasanimam.readit",
+    "copyright": "Copyright 2022",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "default"
+    },
+    "win": {
+      "target": "zip"
+    },
+    "linux": {
+      "category": "Utility"
+    }
   }
 }
